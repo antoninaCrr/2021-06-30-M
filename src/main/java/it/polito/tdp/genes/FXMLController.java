@@ -38,6 +38,26 @@ public class FXMLController {
 
     @FXML
     void doContaArchi(ActionEvent event) {
+    	
+    	 String soglia = txtSoglia.getText();
+    	 double valore;
+         
+         try {
+         	valore = Double.parseDouble(soglia);
+         }catch(NumberFormatException e) {
+         	this.txtResult.appendText("Devi inserire un valore soglia numerico\n");
+         	return;
+         }
+         
+         if(model.verificaSoglia(valore)) {
+        	 String result = model.contaArchi(valore);
+        	 String[] ris = result.split(";");
+        	 this.txtResult.appendText("Soglia: "+valore+" Maggiori: "+ris[1]+" Minori: "+ris[0]+"\n");
+         }else {
+        	 this.txtResult.appendText("Soglia non valida\n");
+        	 return;
+         }
+    	
 
     }
 
@@ -52,11 +72,20 @@ public class FXMLController {
         assert btnRicerca != null : "fx:id=\"btnRicerca\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtSoglia != null : "fx:id=\"txtSoglia\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
-
+   
     }
 
 	public void setModel(Model model) {
 		this.model = model ;
+		
+       this.model.creaGrafo();
+    	
+    	txtResult.appendText("Grafo creato!\n");
+    	txtResult.appendText("# Vertici : " + this.model.nVertici() + "\n");
+    	txtResult.appendText("# Archi : " + this.model.nArchi() + "\n");
+    	txtResult.appendText("Peso minimo: "+model.pesoMin()+" Peso massimo: "+model.pesoMax()+"\n");
+		
+		
 		
 	}
 }
